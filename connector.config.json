@@ -440,7 +440,7 @@
   },
   "source": {
     "marketplaceId": "irodori.iotdb",
-    "repository": "https://github.com/hjosugi/irodori-extension-iotdb",
+    "repository": "https://github.com/irodori-table/irodori-extension-iotdb",
     "knowledgeEngineStatus": "recognized_no_connector",
     "adapter": null,
     "adapterSha256": null,

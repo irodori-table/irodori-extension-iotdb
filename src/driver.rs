@@ -1,3 +1,4 @@
+use irodori_connector_abi::{option_bool, option_string, push_sensitive, request_containers};
 use std::cell::RefCell;
 use std::collections::{BTreeMap, HashMap};
 
@@ -520,47 +521,6 @@ fn with_connection_mut<R>(
     })
 }
 
-fn request_containers(request: &Value) -> Vec<&Value> {
-    [
-        Some(request),
-        request.get("profile"),
-        request.get("options"),
-        request.get("auth"),
-        request.get("secrets"),
-        request
-            .get("profile")
-            .and_then(|profile| profile.get("options")),
-        request
-            .get("profile")
-            .and_then(|profile| profile.get("auth")),
-        request
-            .get("profile")
-            .and_then(|profile| profile.get("secrets")),
-    ]
-    .into_iter()
-    .flatten()
-    .collect()
-}
-
-fn option_string(request: &Value, fields: &[&str]) -> Option<String> {
-    request_containers(request)
-        .into_iter()
-        .find_map(|container| {
-            fields.iter().find_map(|field| {
-                container
-                    .get(*field)
-                    .map(|value| match value {
-                        Value::String(value) => value.clone(),
-                        Value::Number(value) => value.to_string(),
-                        Value::Bool(value) => value.to_string(),
-                        _ => String::new(),
-                    })
-                    .map(|value| value.trim().to_string())
-                    .filter(|value| !value.is_empty())
-            })
-        })
-}
-
 fn option_i32(request: &Value, fields: &[&str]) -> Option<i32> {
     option_i64(request, fields).and_then(|value| i32::try_from(value).ok())
 }
@@ -575,22 +535,6 @@ fn option_i64(request: &Value, fields: &[&str]) -> Option<i64> {
                     .and_then(|value| value.as_i64().or_else(|| value.as_str()?.parse().ok()))
             })
         })
-}
-
-fn option_bool(request: &Value, fields: &[&str]) -> Option<bool> {
-    option_string(request, fields).and_then(|value| match value.to_ascii_lowercase().as_str() {
-        "true" | "1" | "yes" | "on" => Some(true),
-        "false" | "0" | "no" | "off" => Some(false),
-        _ => None,
-    })
-}
-
-fn push_sensitive(values: &mut Vec<String>, value: Option<&str>) {
-    if let Some(value) = value.map(str::trim).filter(|value| !value.is_empty()) {
-        if !values.iter().any(|existing| existing == value) {
-            values.push(value.to_string());
-        }
-    }
 }
 
 #[cfg(test)]

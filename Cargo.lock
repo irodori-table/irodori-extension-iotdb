@@ -55,7 +55,7 @@ dependencies = [
 
 [[package]]
 name = "irodori-extension-iotdb"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "iotdb-client-rs",
  "irodori-connector-abi",

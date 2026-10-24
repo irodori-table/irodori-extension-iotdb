@@ -1,0 +1,5 @@
+正在使用
+thrift --out /Users/liuyongwei/Rust/iotdb-client-rs/src/client --gen rs /Users/liuyongwei/OpenSource/iotdb/thrift/src/main/thrift/rpc.thrift
+
+
+thrift -I /Users/liuyongwei/OpenSource/iotdb/thrift-commons/src/main/thrift --out /Users/liuyongwei/Rust/iotdb-client-rs/src/client --gen rs /Users/liuyongwei/OpenSource/iotdb/thrift/src/main/thrift/client.thrift

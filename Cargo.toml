@@ -36,3 +36,6 @@ lto = "thin"
 codegen-units = 1
 strip = "symbols"
 panic = "abort"
+
+[patch.crates-io]
+iotdb-client-rs = { path = "vendor/iotdb-client-rs" }
